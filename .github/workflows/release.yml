@@ -21,19 +21,25 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y zip make
 
-      - name: Build XPI
-        run: make xpi
+      - name: Build both XPI versions
+        run: |
+          make xpi
+          make xpi-unsupported
 
-      - name: Upload XPI artifact
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: thunderbird-addon
-          path: dist/minimizeonclose.xpi
+          path: |
+            dist/minimizeonclose.xpi
+            dist/minimizeonclose-unsupported.xpi
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/minimizeonclose.xpi
+          files: |
+            dist/minimizeonclose.xpi
+            dist/minimizeonclose-unsupported.xpi
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
